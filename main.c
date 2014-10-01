@@ -1,5 +1,6 @@
 #include <unistd.h>
 #include <sys/types.h>
+#include <stdio.h>
 
 char vect[10][10];
 char nomeficheiro;
@@ -22,7 +23,8 @@ char randomfile(){
 	return nomeficheiro;
 }
 
-char* randomstring(){
+char randomstring(){
+	
 		    int cadeia2 = rand() % 10;
 		    buffer=vect[cadeia2];
 		    
@@ -32,7 +34,7 @@ char* randomstring(){
 
 int main(){
 		
-    int u,v;
+    int u,v, fd;
 	char filename, string;
    
 	
@@ -41,8 +43,8 @@ int main(){
 				init();
 				filename=randomfile();
 				string=randomstring();
-				open(filename,w+);
-				ssize_t write(filename, buffer, sizeof(buffer));
+				fd = open(filename,w+);
+				ssize_t write(fd, buffer, sizeof(buffer));
 				close(filename);
 			}
 	}
