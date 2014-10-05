@@ -5,11 +5,13 @@
 #include <stdlib.h>
 #include <string.h>
 
+/* variables initialization */
 char filename[14];
 char buffer[11];
 int file_descriptor;
 int size_buffer = sizeof(buffer);
 
+/* open_random_file - chooses random file, sets the path and opens it */
 void open_random_file(){
     int i;
     i = rand() % 5; /*random number from 0 to 4 */
@@ -21,11 +23,12 @@ void open_random_file(){
     file_descriptor = open(path, O_RDONLY);
 }
 
+/* reads string from opened file */
 void read_string(){
     read(file_descriptor, buffer, size_buffer);
 }
 
-
+/* saves first string and compares to the others. closes file */
 int main(){
     char first_string[11];
     int i,j=0;
@@ -42,4 +45,5 @@ int main(){
         }
     }
     printf("%d",j);
+    close(file_descriptor);
 }
