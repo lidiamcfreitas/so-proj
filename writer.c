@@ -1,99 +1,75 @@
-#include <stdlib.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <fcntl.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
-#include  <sys/types.h>
 
-char vect[10][10];
 
+/* variables initialization */
+char strings[10][11];
+char filename[14];
+char buffer[11];
+
+/* init - initializes vector strings */
 void init(){
-int i,j;
-
-    for  (i=0;i<9;i++){
-        for(j=0;j<9;j++)
-             vect[i][j] = 'a' + i;        
-        vect[i][9]= '\n';
-     } 
+    int i,j;
+    
+    for(i=0; i<10; i++){
+        for(j=0; j<9; j++){
+            strings[i][j] = 'a'+ i ;
+        }
+        strings[i][j] = '\n';
+        j++;
+        strings[i][j] = '\0';
+    }
 }
 
-
-FILE* fileopen(){
-
-    char nomeficheiro[12];
-	
-    sprintf(nomeficheiro,"SO2014-%d.txt", rand() %5);
-
-    FILE *fd = fopen(nomeficheiro, "a");
-    if (fd == NULL)
-           fd = fopen(nomeficheiro, "w+"); 
-            
-    return fd;
-}
-
-void escreve(){
+/* random_file - changes filename to a random file name of 5 possible */
+void random_file(){
     int i;
-    FILE *fp=fileopen();               
-    int cadeia2 = rand() % 10;	 
+    i = rand() % 5; /*random number from 0 to 4 */
+    
+    sprintf(filename, "SO2014-%d.txt", i);
+}
 
-    fwrite(vect[cadeia2], sizeof(vect[0][0]), sizeof(vect[cadeia2]), fp);
-    fclose(fp);
+/* random_string - modifies buffer to a random string from vector strings */
+void random_string(){
+    int i;
+    i = rand() % 10;
+    
+    strcpy(buffer, strings[i]);
+}
+
+/* open_write - opens random file and writes random string 1024 times */
+void open_write(){
+    int i, file_descriptor, size_buffer;
+    size_buffer = sizeof(buffer);
+    char path[16];
+
+    /* OPEN FILE */
+    /* mode - user has read permission, file owner has read, write and exec
+    *         other have read permission */  
+    mode_t mode = S_IRWXU | S_IRUSR | S_IROTH;
+    sprintf(path, "./%s", filename);
+    file_descriptor = open(path, O_CREAT|O_WRONLY|O_TRUNC , mode);
+    
+    /* WRITE FILE */
+    for(i=0;i<1024;i++){
+    write(file_descriptor, buffer, size_buffer);
+    }
+
+    close(file_descriptor);
 }
 
 int main(){
-	
-	time_t t;
-		
-    int v;
-    srand((unsigned) time(&t));
-
+    int i;
     init();
-	
-	
-	pid_t  pid, pid2, pid3;
-	int status, status1, status2; 
-	
-	int contaciclospai=0;
-	int contaciclosfilho1=1;
-	int contaciclosfilho2;
-	int contaciclospai2;
-
-	
-    pid = fork();
-
-    if (pid == 0){
-    
-        pid2 = fork();
-        if(pid2 == 0){
-            for(contaciclosfilho1=0;contaciclosfilho1<2560;contaciclosfilho1+=2){
-                for(v=0;v<1024;v++)
-                    escreve();                
-            }
-        }else{
-            for(contaciclosfilho2=2560;contaciclosfilho2<5120;contaciclosfilho2+=2){
-
-                for(v=0;v<1024;v++)
-                    escreve();
-            }
-            wait(&status1);
-        }
-        
-    }else{
-    
-        pid3 = fork();
-        if(pid3 == 0){
-            for(contaciclospai=1;contaciclospai<2560;contaciclospai+=2){
-                for(v=0;v<1024;v++) 
-                    escreve();
-            }
-        }else{
-            for(contaciclospai2=2561;contaciclospai2<5120;contaciclospai2+=2){
-                for(v=0;v<1024;v++)
-                    escreve();                
-            }
-            wait(&status2);
-        }
-        wait(&status);
-        
-    }
-
+    for(i=0;i<5120;i++){
+        random_file();
+    	random_string();
+    	open_write();
+    }   
     return 0;
-    }
+}
+
