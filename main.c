@@ -1,3 +1,5 @@
+/* its necessary to update main function for it to become generic */
+
 #include <unistd.h>
 #include <sys/types.h>
 #include <stdio.h>
