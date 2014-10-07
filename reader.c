@@ -1,5 +1,10 @@
 #include "reader.h"
 
+
+
+/*
+ * main program
+ */
 int main(){
 	int res=reader();
     
@@ -10,27 +15,37 @@ int main(){
 
 /* reader - saves first string and compares to the others. closes file */
 int reader(){
+    
+    /* variable initialization */
 	char* buffer= (char*) malloc(sizeof(char)*11);
     char first_string[11];
-	int i,file_descriptor;
+	int i, file_descriptor;
 	int size_buffer = sizeof(char)*11;
 	
+    /* opens random file */
     file_descriptor = open_random_file();
+    
+    /* saves the first string from the opened file */
     buffer = read_string(file_descriptor,buffer,size_buffer);
-    strcpy(first_string, buffer); /* saves the first string from the opened file */
+    strcpy(first_string, buffer);
+    
     for(i=1;i<1024;i++)
-	{   
+	{   /* reads next string */
         buffer = read_string(file_descriptor,buffer,size_buffer);
-        if (strcmp(buffer, "error") != 0) { /* reached end of file */
-            if(strcmp(first_string, buffer) != 0){ /* string is different from first string) */
+        
+        /* reached end of file before it was supposed*/
+        if (strcmp(buffer, "error") == 0) {
+            free(buffer);
+            close(file_descriptor);
+            return -1;
+        }
+        else {
+            /* string read is different from first string) */
+            if(strcmp(first_string, buffer) != 0){
                 close(file_descriptor);
                 free(buffer);
                 return -1;
 			}
-        }
-        else{ /* reached end of file before it was supposed*/
-            close(file_descriptor);
-            return -1;
         }
 		
     }
