@@ -67,6 +67,8 @@ char** init(char** strings){
     return strings;
 }
 
+
+
 /* random_file - changes path to a random file name of 5 possible */
 char* random_file(char* path){
     int i;
@@ -77,6 +79,8 @@ char* random_file(char* path){
     return path;
 }
 
+
+
 /* random_string - modifies buffer to a random string from vector strings */
 char* random_string(char** strings, char* buffer){
     int i;
@@ -86,6 +90,8 @@ char* random_string(char** strings, char* buffer){
     
     return buffer;
 }
+
+
 
 /* open_write - opens a file and writes a string 1024 times */
 void open_write(char* path, char* buffer){
