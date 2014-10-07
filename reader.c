@@ -13,6 +13,8 @@ int main(){
 	return 0;
 }
 
+
+
 /* reader - saves first string and compares to the others. closes file */
 int reader(){
     
@@ -51,40 +53,59 @@ int reader(){
         }
 		
     }
-    buffer = read_string(file_descriptor,buffer,size_buffer); /* reads the 1025th line */
+    /* reads the 1025th line */
+    buffer = read_string(file_descriptor,buffer,size_buffer);
     close(file_descriptor);
-    if (strcmp(buffer, "error") != 0){ /* if the file has more than 1024 lines it is wrong */
+    
+    /* if the file has more than 1024 lines it is wrong */
+    if (strcmp(buffer, "error") != 0){
         printf("%s", buffer);
         free(buffer);
         return -1;
-    } else { /* exactly 1024 lines */
+        
+    }
+    /* exactly 1024 lines */
+    else {
         free(buffer);
         return 0;
     }
 	
 }
+
+
  
 /* open_random_file - chooses random file, sets the path and opens it */
 int open_random_file(){
+    
+    /* variable initialization */
 	char path[15];
-	
     int i,file_descriptor;
-	srand ( time(NULL) ); /* initialize seed */
-    i = rand() %5 ; /*random number from 0 to 4 */
+    
+    /* initializes seed, needed for rand() to work properly */
+	srand ( time(NULL) );
+    i = rand() %5 ;
     sprintf(path, "./SO2014-%d.txt", i);
+    
+    /* opens random file and returns it */
     file_descriptor = open(path, O_RDONLY);
 	return file_descriptor;
 }
+
+
  
 /* read_string - reads string from opened file */
 char* read_string(int f_descriptor,char* buffer,int size){
+    
+    /* variable initialization */
 	int result, bytes_read;
     char* error = "error";
     
+    /* if bytes_read = 0: reached end of file and buffer should contain the message "error" */
     bytes_read = read(f_descriptor, buffer, size);
     if (bytes_read==0) {
         strcpy(buffer, error);
     }
+    
     return buffer;
 
 }
