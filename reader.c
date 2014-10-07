@@ -37,6 +37,7 @@ int reader(){
         if (strcmp(buffer, "error") == 0) {
             free(buffer);
             close(file_descriptor);
+            
             return -1;
         }
         else {
@@ -44,6 +45,7 @@ int reader(){
             if(strcmp(first_string, buffer) != 0){
                 close(file_descriptor);
                 free(buffer);
+                
                 return -1;
 			}
         }
@@ -56,9 +58,8 @@ int reader(){
         free(buffer);
         return -1;
     } else { /* exactly 1024 lines */
-        printf("%s", buffer);
         free(buffer);
-        return -1;
+        return 0;
     }
 	
 }
