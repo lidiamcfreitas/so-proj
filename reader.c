@@ -1,25 +1,25 @@
-#include <unistd.h>
-#include <sys/types.h>
-#include <fcntl.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <time.h>
+//#include <unistd.h>
+//#include <sys/types.h>
+//#include <fcntl.h>
+//#include <stdio.h>
+//#include <stdlib.h>
+//#include <string.h>
+//#include <time.h>
+//
+///* mover para o header file */
+//int reader();
+//int open_random_file();
+//char* read_string(int f_descriptor,char* buffer,int size);
 
-/* mover para o header file */
-int reader();
-int open_random_file();
-char* read_string(int f_descriptor,char* buffer,int size);
+#include "reader.h"
 
-
-/* copiar para o main.c */
 int main(){
 	int res=reader();
 	printf("%d\n",res);
 	return 0;
 }
 
-/* saves first string and compares to the others. closes file */
+/* reader - saves first string and compares to the others. closes file */
 int reader(){
 	char* buffer= (char*) malloc(sizeof(char)*11);
     char first_string[11];
@@ -63,7 +63,7 @@ int open_random_file(){
 	return file_descriptor;
 }
  
-/* reads string from opened file */
+/* read_string - reads string from opened file */
 char* read_string(int f_descriptor,char* buffer,int size){
 	int result, bytes_read;
     char* error = "error";

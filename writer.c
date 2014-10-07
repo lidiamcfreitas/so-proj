@@ -1,19 +1,17 @@
-#include <unistd.h>
-#include <sys/types.h>
-#include <fcntl.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-
-int writer();
-char** init(char** strings);
-char* random_file(char* filename);
-char* random_string(char** strings, char* buffer);
-void open_write(char* filename, char* buffer);
-
-
-
+//#include <unistd.h>
+//#include <sys/types.h>
+//#include <fcntl.h>
+//#include <stdio.h>
+//#include <stdlib.h>
+//#include <string.h>
+//
+//
+//int writer();
+//char** init(char** strings);
+//char* random_file(char* filename);
+//char* random_string(char** strings, char* buffer);
+//void open_write(char* filename, char* buffer);
+#import "writer.h"
 
 int main(){
     
@@ -22,7 +20,8 @@ int main(){
 }
 
 
-
+/* writer - opens a random file, gets a random string and writes it
+* 1024 times; repeats the process 5120 times */
 int writer(){
     int i;
     /* char strings[10][11]; */
