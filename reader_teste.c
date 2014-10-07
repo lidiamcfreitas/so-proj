@@ -24,7 +24,7 @@ int reader(){
 	char* buffer= (char*) malloc(sizeof(char)*11);
     char first_string[11];
 	int i,file_descriptor;
-	int size_buffer = sizeof(char)*11; /* int size_buffer = sizeof(buffer*); */
+	int size_buffer = sizeof(char)*11;
 	
     file_descriptor = open_random_file();
     buffer = read_string(file_descriptor,buffer,size_buffer);
@@ -34,12 +34,14 @@ int reader(){
         buffer = read_string(file_descriptor,buffer,size_buffer);
         if (strcmp(buffer, "error") != 0) { /* nao chegou ao final do ficheiro */
             if(strcmp(first_string, buffer) != 0){ /* strings nao sao iguais) */
+                printf("-%s-\n-%s-   STRINGS DIFERENTES\n",buffer,first_string); /* TIRAR */
                 close(file_descriptor);
                 free(buffer);
                 return -1;
 			}
         }
         else{ /* chegou ao final do ficheiro */
+            printf("-%s-\n-%s-   FINAL FICHEIRO\n",buffer,first_string);
             close(file_descriptor);
             /* free(buffer); */
             return -1;
@@ -48,6 +50,7 @@ int reader(){
     }
     close(file_descriptor);
 	free(buffer);
+    printf ("CORREU TUDO BEM CARALHO");
 	return 0;
 }
  
@@ -59,6 +62,7 @@ int open_random_file(){
 	srand ( time(NULL) ); /* initialize seed */
     i = rand() %5 ; /*random number from 0 to 4 */
     sprintf(path, "./SO2014-%d.txt", i);
+	printf("%d\n",i);
     file_descriptor = open(path, O_RDONLY);
 	return file_descriptor;
 }
