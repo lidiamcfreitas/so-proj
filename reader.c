@@ -1,21 +1,10 @@
-//#include <unistd.h>
-//#include <sys/types.h>
-//#include <fcntl.h>
-//#include <stdio.h>
-//#include <stdlib.h>
-//#include <string.h>
-//#include <time.h>
-//
-///* mover para o header file */
-//int reader();
-//int open_random_file();
-//char* read_string(int f_descriptor,char* buffer,int size);
-
 #include "reader.h"
 
 int main(){
 	int res=reader();
+    
 	printf("%d\n",res);
+    
 	return 0;
 }
 
@@ -24,31 +13,39 @@ int reader(){
 	char* buffer= (char*) malloc(sizeof(char)*11);
     char first_string[11];
 	int i,file_descriptor;
-	int size_buffer = sizeof(char)*11; /* int size_buffer = sizeof(buffer*); */
+	int size_buffer = sizeof(char)*11;
 	
     file_descriptor = open_random_file();
     buffer = read_string(file_descriptor,buffer,size_buffer);
-    strcpy(first_string, buffer);
+    strcpy(first_string, buffer); /* saves the first string from the opened file */
     for(i=1;i<1024;i++)
 	{   
         buffer = read_string(file_descriptor,buffer,size_buffer);
-        if (strcmp(buffer, "error") != 0) { /* nao chegou ao final do ficheiro */
-            if(strcmp(first_string, buffer) != 0){ /* strings nao sao iguais) */
+        if (strcmp(buffer, "error") != 0) { /* reached end of file */
+            if(strcmp(first_string, buffer) != 0){ /* string is different from first string) */
                 close(file_descriptor);
                 free(buffer);
                 return -1;
 			}
         }
-        else{ /* chegou ao final do ficheiro */
+        else{ /* reached end of file before it was supposed*/
             close(file_descriptor);
-            /* free(buffer); */
             return -1;
         }
 		
     }
+    buffer = read_string(file_descriptor,buffer,size_buffer); /* reads the 1025th line */
     close(file_descriptor);
-	free(buffer);
-	return 0;
+    if (strcmp(buffer, "error") != 0){ /* if the file has more than 1024 lines it is wrong */
+        printf("%s", buffer);
+        free(buffer);
+        return -1;
+    } else { /* exactly 1024 lines */
+        printf("%s", buffer);
+        free(buffer);
+        return -1;
+    }
+	
 }
  
 /* open_random_file - chooses random file, sets the path and opens it */
