@@ -1,55 +1,49 @@
-//#include <unistd.h>
-//#include <sys/types.h>
-//#include <fcntl.h>
-//#include <stdio.h>
-//#include <stdlib.h>
-//#include <string.h>
-//
-//
-//int writer();
-//char** init(char** strings);
-//char* random_file(char* filename);
-//char* random_string(char** strings, char* buffer);
-//void open_write(char* filename, char* buffer);
 #import "writer.h"
 
+
+
+/*
+ * main program
+ */
 int main(){
     
+    /* initializes seed, needed for rand() to work properly */
+	srand ( time(NULL) );
+
     writer();
+    
     return 0;
 }
+
 
 
 /* writer - opens a random file, gets a random string and writes it
 * 1024 times; repeats the process 5120 times */
 int writer(){
+    
+    /* variables initialization */
     int i;
-    /* char strings[10][11]; */
     char **strings = malloc( 10 * sizeof(char *));
     for (i = 0; i < 11; i++){
             strings[i] = malloc(11 * sizeof(char));
     }
-    
-    /* char filename[15]; */
-    char * filename = (char *) malloc(15*sizeof(char));
-    
-    /* char buffer[11]; */
+    char * path = (char *) malloc(15*sizeof(char));
     char * buffer = (char *) malloc(11*sizeof(char));
     
     strings = init(strings);
     for(i=0;i<5120;i++){
-        filename = random_file(filename);
+        
+        /* opens random file, and writes random string 1024 times */
+        path = random_file(path);
     	buffer = random_string(strings, buffer);
-    	open_write(filename, buffer);
+    	open_write(path, buffer);
     }
     
-    free(filename);
+    free(path);
     free(buffer);
-    
     for (i = 0; i < 10; i++){
         free(strings[i]);
     }
-    
     free(strings);
     
     return 0;
@@ -60,7 +54,6 @@ int writer(){
 /* init - initializes vector strings */
 char** init(char** strings){
     int i,j;
-    
     
     for(i=0; i<10; i++){
         for(j=0; j<9; j++){
@@ -74,14 +67,14 @@ char** init(char** strings){
     return strings;
 }
 
-/* random_file - changes filename to a random file name of 5 possible */
-char* random_file(char* filename){
+/* random_file - changes path to a random file name of 5 possible */
+char* random_file(char* path){
     int i;
     
-    i = rand() % 5; /*random number from 0 to 4 */
-    sprintf(filename, "./SO2014-%d.txt", i);
+    i = rand() % 5;
+    sprintf(path, "./SO2014-%d.txt", i);
     
-    return filename;
+    return path;
 }
 
 /* random_string - modifies buffer to a random string from vector strings */
@@ -94,19 +87,17 @@ char* random_string(char** strings, char* buffer){
     return buffer;
 }
 
-/* open_write - opens random file and writes random string 1024 times */
-void open_write(char* filename, char* buffer){
+/* open_write - opens a file and writes a string 1024 times */
+void open_write(char* path, char* buffer){
     int i, file_descriptor, size_buffer;
-    size_buffer = sizeof(char)*11;  /* sizeof(buffer*) */
+    size_buffer = sizeof(char)*11;
 
-    /* OPEN FILE */
     /* mode - user has read permission, file owner has read, write and exec
-    *         other have read permission */  
+    *         others have read permission */
     mode_t mode = S_IRWXU | S_IRUSR | S_IROTH;
     
-    file_descriptor = open(filename, O_CREAT|O_WRONLY|O_TRUNC , mode);
+    file_descriptor = open(path, O_CREAT|O_WRONLY|O_TRUNC , mode);
     
-    /* WRITE FILE */
     for(i=0;i<1024;i++){
     write(file_descriptor, buffer, size_buffer);
     }

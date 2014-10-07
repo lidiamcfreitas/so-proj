@@ -15,13 +15,13 @@ int writer();
 /* init - initializes vector strings */
 char** init(char** strings);
 
-/* random_file - changes filename to a random file name of 5 possible */
-char* random_file(char* filename);
+/* random_file - changes path to a random file name of 5 possible */
+char* random_file(char* path);
 
 /* random_string - modifies buffer to a random string from vector strings */
 char* random_string(char** strings, char* buffer);
 
-/* open_write - opens random file and writes random string 1024 times */
-void open_write(char* filename, char* buffer);
+/* open_write - opens a file and writes a string 1024 times */
+void open_write(char* path, char* buffer);
 
 #endif
