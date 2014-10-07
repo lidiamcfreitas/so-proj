@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h> 
 
 /* writer - opens a random file, gets a random string and writes it 
 * 1024 times; repeats the process 5120 times */
