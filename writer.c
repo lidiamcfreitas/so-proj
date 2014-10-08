@@ -24,7 +24,7 @@ int writer(){
     /* variables initialization */
     int i;
     char **strings = malloc( 10 * sizeof(char *));
-    for (i = 0; i < 11; i++){
+    for (i = 0; i < 10; i++){
             strings[i] = malloc(11 * sizeof(char));
     }
     char * path = (char *) malloc(15*sizeof(char));
