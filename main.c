@@ -1,29 +1,22 @@
-#include "time.h"
+#include <sys/time.h>
 #include <stdio.h>
 #include <unistd.h>
 
-void funcao();
-
-clock_t t;
+void start_writer();
 
 int main(){
-	double elapsed;
-	clock_t t;
-	int function_time;
+	struct timeval st , et;
 	
-    t = clock();
+    gettimeofday(&st , NULL);    
+    start_writer();
+    gettimeofday(&et , NULL);
     
-    funcao();
-    
-    t = clock() - t;
-    double time_taken = ((double)t)/CLOCKS_PER_SEC; // in seconds
- 
-    printf("fun() took %f seconds to execute \n", time_taken);
-
+	printf("Tempo total de execução do programa: %lu seconds\n",(et.tv_sec - st.tv_sec));
+     
 return 0;
 }
 
-void funcao(){
+void start_writer(){
 
 	int i;
     pid_t pid;
