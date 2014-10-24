@@ -6,7 +6,7 @@
  * main program
  */
 int main(){
-
+    
     /* initializes seed, needed for rand() to work properly */
 	srand ( time(NULL) );
 
@@ -31,7 +31,7 @@ int writer(){
     char * buffer = (char *) malloc(11*sizeof(char));
     
     strings = init(strings);
-    for(i=0;i<512;i++){
+    for(i=0;i<5120;i++){
         
         /* opens random file, and writes random string 1024 times */
         path = random_file(path);
