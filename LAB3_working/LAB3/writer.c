@@ -1,6 +1,7 @@
 #include <sys/time.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <sys/wait.h>
 
 
 void start_writer();

@@ -79,7 +79,8 @@ int reader(){
 			free(buffer);
 			return 0;
 		}
-	} 		
+	}
+    return 0;
 }
 
 
