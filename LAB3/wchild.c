@@ -78,7 +78,7 @@ char** init(char** strings){
 char* random_file(char* path){
     int i;
     
-    i = rand() % 5;
+    i = 1; //rand() % 5; //EDITAR ISTO PARA A ENTREGA FINAL
     sprintf(path, "./SO2014-%d.txt", i);
     
     return path;
@@ -96,8 +96,6 @@ char* random_string(char** strings, char* buffer){
     return buffer;
 }
 
-
-
 /* open_write - opens a file and writes a string 1024 times */
 void open_write(char* path, char* buffer){
     int i, file_descriptor, size_buffer;
@@ -105,23 +103,27 @@ void open_write(char* path, char* buffer){
 	int LOCK;
     /* mode - user has read permission, file owner has read, write and exec
     *         others have read permission */
+
     mode_t mode = S_IRWXU | S_IRUSR | S_IROTH;
     
     file_descriptor = open(path, O_CREAT|O_WRONLY|O_TRUNC , mode);
     
-    printf("%ld %s %i  \n ", getpid(), path, file_descriptor);
-    
+    printf("%d %s %i  \n ", getpid(), path, file_descriptor);
+
+    printf("VOU BLOQUEAR AGORA \n");
+
     LOCK = flock(file_descriptor, LOCK_EX);
-    
-	if(LOCK == 0){	
-    
+
+    printf("CODIGO DO LOCK %d \n ", LOCK);
+
+	if(LOCK == 0){
         for(i=0;i<1024;i++){
-	
+
         write(file_descriptor, buffer, size_buffer);
-    
+        
         }
     }else{
-		printf("%ld %s \n", getpid(), strerror(errno));
+		printf("%d %s \n", getpid(), strerror(errno));
 	}
 
     close(file_descriptor);

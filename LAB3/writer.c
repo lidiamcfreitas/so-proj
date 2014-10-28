@@ -1,6 +1,8 @@
 #include <sys/time.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <sys/wait.h>
+
 
 
 void start_writer();
@@ -9,7 +11,9 @@ int main(){
 	struct timeval st , et;
 	
     gettimeofday(&st , NULL);    
+
     start_writer();
+
     gettimeofday(&et , NULL);
     
 	printf("Tempo total de execução do programa: %lu seconds\n",(et.tv_sec - st.tv_sec));

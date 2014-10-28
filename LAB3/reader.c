@@ -1,5 +1,6 @@
 #include "reader.h"
 #include <errno.h>
+#include <unistd.h>
 
 int LOCK;
 
@@ -43,6 +44,7 @@ int reader(){
 			
 			/* reached end of file before it was supposed*/
 			if (strcmp(buffer, "error") == 0) {
+				printf("ERRO DO BUFFER, E NÃO DO FICHEIRO,NAO CONSIGO ACEDER AO FICHEIRO -->");
 				free(buffer);
 			
 		
@@ -78,6 +80,7 @@ int reader(){
 			return 0;
 		}
 	} 		
+	return 0;
 }
 
 
@@ -91,13 +94,11 @@ int open_random_file(){
     
     /* initializes seed, needed for rand() to work properly */
 	srand ( time(NULL) );
-    i = rand() %5 ;
+    i = 1; //rand() %5 ;
     sprintf(path, "./SO2014-%d.txt", i);
     
     /* opens random file and returns it */
     file_descriptor = open(path, O_RDONLY);
-    
-    printf("A LIDIZ DIZ SER ESTUPIDA ");
     
     printf("%s %i \n", path, file_descriptor);
     
