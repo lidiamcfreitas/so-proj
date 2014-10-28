@@ -43,6 +43,8 @@ int reader(){
 			
 			/* reached end of file before it was supposed*/
 			if (strcmp(buffer, "error") == 0) {
+                printf("Erro de Acesso ao Ficheiro");
+                
 				free(buffer);
 			
 		
