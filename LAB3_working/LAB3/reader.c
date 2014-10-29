@@ -44,10 +44,8 @@ int reader(){
 			/* reached end of file before it was supposed*/
 			if (strcmp(buffer, "error") == 0) {
                 printf("Erro de Acesso ao Ficheiro");
-                
 				free(buffer);
-			
-		
+                LOCK=flock(file_descriptor, LOCK_UN);				
 				close(file_descriptor);
 				
 				return -1;
@@ -100,7 +98,6 @@ int open_random_file(){
     /* opens random file and returns it */
     file_descriptor = open(path, O_RDONLY);
     
-    printf("A LIDIZ DIZ SER ESTUPIDA ");
     
     printf("%s %i \n", path, file_descriptor);
     

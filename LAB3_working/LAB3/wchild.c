@@ -102,7 +102,7 @@ void open_write(char* path, char* buffer){
     *         others have read permission */
     mode_t mode = S_IRWXU | S_IRUSR | S_IROTH;
     
-    file_descriptor = open(path, O_CREAT|O_WRONLY|O_TRUNC , mode);
+    file_descriptor = open(path, O_CREAT|O_WRONLY , mode);
     
     printf("%s %i \n ", path, file_descriptor);
     
@@ -120,7 +120,6 @@ void open_write(char* path, char* buffer){
 	}
 
     close(file_descriptor);
+
+  LOCK = flock(file_descriptor, LOCK_UN);
 }
-
-
-
