@@ -33,7 +33,7 @@ void start_writer(){
         pid=fork();
 
         if (pid==0){
-			execl("./wchild", "wchild" , NULL);
+			execl("wchild", "wchild" , NULL);
 			
 		}else{
 			vec_status[i]=status;

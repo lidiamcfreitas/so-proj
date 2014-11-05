@@ -1,7 +1,4 @@
-#include "wchild.h"
-#include <sys/file.h>
-#include <errno.h>
-#include <sys/stat.h>
+#include "common.h"
 
 /*
  * main program
@@ -25,11 +22,11 @@ int writer(){
     /* variables initialization */
     int i;
     char **strings = malloc( 10 * sizeof(char *));
-    char * path = (char *) malloc(15*sizeof(char));
-    char * buffer = (char *) malloc(11*sizeof(char));
     for (i = 0; i < 10; i++){
         strings[i] = malloc(11 * sizeof(char));
     }
+    char * path = (char *) malloc(15*sizeof(char));
+    char * buffer = (char *) malloc(11*sizeof(char));
 
     strings = init(strings);
     for(i=0;i<512;i++){
@@ -51,6 +48,7 @@ int writer(){
 }
 
 
+
 /* init - initializes vector strings */
 char** init(char** strings){
     int i,j;
@@ -68,6 +66,7 @@ char** init(char** strings){
 }
 
 
+
 /* random_file - changes path to a random file name of 5 possible */
 char* random_file(char* path){
     int i;
@@ -77,6 +76,7 @@ char* random_file(char* path){
 
     return path;
 }
+
 
 
 /* random_string - modifies buffer to a random string from vector strings */
@@ -90,14 +90,15 @@ char* random_string(char** strings, char* buffer){
 }
 
 
+
 /* open_write - opens a file and writes a string 1024 times */
 void open_write(char* path, char* buffer){
-    int i, file_descriptor, size_buffer, LOCK;
-    mode_t mode = S_IRWXU | S_IRUSR | S_IROTH;
+    int i, file_descriptor, size_buffer;
     size_buffer = sizeof(char)*11;
-
+    int LOCK;
     /* mode - user has read permission, file owner has read, write and exec
      *         others have read permission */
+    mode_t mode = S_IRWXU | S_IRUSR | S_IROTH;
 
     file_descriptor = open(path, O_CREAT|O_WRONLY , mode);
 
@@ -113,8 +114,8 @@ void open_write(char* path, char* buffer){
     }else{
         printf("%s \n", strerror(errno));
     }
-
+    LOCK = flock(file_descriptor, LOCK_UN);
     close(file_descriptor);
 
-    LOCK = flock(file_descriptor, LOCK_UN);
+
 }

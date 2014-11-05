@@ -1,9 +1,6 @@
 #include "reader.h"
-#include <errno.h>
-#include <unistd.h>
-#include <sys/file.h>
 
-int LOCK;
+
 
 /*
  * main program
@@ -30,58 +27,49 @@ int reader(){
     /* opens random file */
     file_descriptor = open_random_file();
     
-    if(LOCK == -1){ 
-		printf("%s \n", strerror(errno));
-        close(file_descriptor);		
-	}else{   
+    /* saves the first string from the opened file */
+    buffer = read_string(file_descriptor,buffer,size_buffer);
+    strcpy(first_string, buffer);
     
-		/* saves the first string from the opened file */
-		buffer = read_string(file_descriptor,buffer,size_buffer);
-		strcpy(first_string, buffer);
-		
-		for(i=1;i<1024;i++)
-		{   /* reads next string */
-			buffer = read_string(file_descriptor,buffer,size_buffer);
-			
-			/* reached end of file before it was supposed*/
-			if (strcmp(buffer, "error") == 0) {
-				printf("ERRO DO BUFFER, E NÃO DO FICHEIRO,NAO CONSIGO ACEDER AO FICHEIRO -->");
-				free(buffer);
-			
-		
-				close(file_descriptor);
-				
-				return -1;
+    for(i=1;i<1024;i++)
+	{   /* reads next string */
+        buffer = read_string(file_descriptor,buffer,size_buffer);
+        
+        /* reached end of file before it was supposed*/
+        if (strcmp(buffer, "error") == 0) {
+            free(buffer);
+            close(file_descriptor);
+            
+            return -1;
+        }
+        else {
+            /* string read is different from first string) */
+            if(strcmp(first_string, buffer) != 0){
+                close(file_descriptor);
+                free(buffer);
+                
+                return -1;
 			}
-			else {
-				/* string read is different from first string) */
-				if(strcmp(first_string, buffer) != 0){
-					close(file_descriptor);
-					free(buffer);
-					
-					return -1;
-				}
-			}
-			
-		}
-		/* reads the 1025th line */
-		buffer = read_string(file_descriptor,buffer,size_buffer);
-		close(file_descriptor);
+        }
 		
-		/* if the file has more than 1024 lines it is wrong */
-		if (strcmp(buffer, "error") != 0){
-			printf("%s", buffer);
-			free(buffer);
-			return -1;
-			
-		}
-		/* exactly 1024 lines */
-		else {
-			free(buffer);
-			return 0;
-		}
-	} 		
-	return 0;
+    }
+    /* reads the 1025th line */
+    buffer = read_string(file_descriptor,buffer,size_buffer);
+    close(file_descriptor);
+    
+    /* if the file has more than 1024 lines it is wrong */
+    if (strcmp(buffer, "error") != 0){
+        printf("%s", buffer);
+        free(buffer);
+        return -1;
+        
+    }
+    /* exactly 1024 lines */
+    else {
+        free(buffer);
+        return 0;
+    }
+	
 }
 
 
@@ -100,12 +88,6 @@ int open_random_file(){
     
     /* opens random file and returns it */
     file_descriptor = open(path, O_RDONLY);
-    
-    printf("%s %i \n", path, file_descriptor);
-    
-    LOCK = flock(file_descriptor, LOCK_SH);
-    
-    
 	return file_descriptor;
 }
 

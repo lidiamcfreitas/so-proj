@@ -78,7 +78,7 @@ char** init(char** strings){
 char* random_file(char* path){
     int i;
     
-    i = 1; //rand() % 5; //EDITAR ISTO PARA A ENTREGA FINAL
+    i = rand() % 5;
     sprintf(path, "./SO2014-%d.txt", i);
     
     return path;

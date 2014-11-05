@@ -1,8 +1,4 @@
-#include <sys/time.h>
-#include <stdio.h>
-#include <unistd.h>
-#include <sys/wait.h>
-#include <sys/types.h>
+#include "common.h"
 
 void start_writer();
 
@@ -22,14 +18,15 @@ void start_writer(){
 
     int i;
     pid_t pid;
-    int status=0;
+    time_t t;
+    int status;
     int vec_status[10];
 
     for(i=0;i<10;i++){
         pid=fork();
 
         if (pid==0){
-            execl("./wchild", "wchild" , NULL);
+            execl("wchild", "wchild" , NULL);
 
         }else{
             vec_status[i]=status;

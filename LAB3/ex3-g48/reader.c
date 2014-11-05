@@ -1,6 +1,5 @@
-#include "reader.h"
-#include <errno.h>
-#include <sys/file.h>
+#include "common.h"
+
 
 int LOCK;
 
@@ -54,6 +53,7 @@ int reader(){
             else {
                 /* string read is different from first string) */
                 if(strcmp(first_string, buffer) != 0){
+                    LOCK=flock(file_descriptor, LOCK_UN);
                     close(file_descriptor);
                     free(buffer);
 
@@ -64,6 +64,7 @@ int reader(){
         }
         /* reads the 1025th line */
         buffer = read_string(file_descriptor,buffer,size_buffer);
+        LOCK=flock(file_descriptor, LOCK_UN);
         close(file_descriptor);
 
         /* if the file has more than 1024 lines it is wrong */
@@ -100,9 +101,10 @@ int open_random_file(){
     file_descriptor = open(path, O_RDONLY);
 
 
-    printf("%s\n", path);
+    // printf("%s %i \n", path, file_descriptor);
 
     LOCK = flock(file_descriptor, LOCK_SH);
+
 
     return file_descriptor;
 }
@@ -113,7 +115,7 @@ int open_random_file(){
 char* read_string(int f_descriptor,char* buffer,int size){
 
     /* variable initialization */
-    int bytes_read;
+    int result, bytes_read;
     char* error = "error";
 
     /* if bytes_read = 0: reached end of file and buffer should contain the message "error" */
@@ -125,3 +127,4 @@ char* read_string(int f_descriptor,char* buffer,int size){
     return buffer;
 
 }
+

@@ -6,8 +6,14 @@ int LOCK;
 /*
  * main program
  */
-int main(){
-    int res=reader();
+int main(int argc, char *argv[]){
+   
+    char* i;
+    
+    i=argv[1];
+    
+    printf("%s", argv[1]);
+    int res=reader(i);
 
     printf("%d\n",res);
 
@@ -17,7 +23,7 @@ int main(){
 
 
 /* reader - saves first string and compares to the others. closes file */
-int reader(){
+int reader(char* h){
 
     /* variable initialization */
     char* buffer= (char*) malloc(sizeof(char)*11);
@@ -26,7 +32,7 @@ int reader(){
     int size_buffer = sizeof(char)*11;
 
     /* opens random file */
-    file_descriptor = open_random_file();
+    file_descriptor = open_file(h);
 
     if(LOCK == -1){ 
         printf("%s \n", strerror(errno));
@@ -86,22 +92,17 @@ int reader(){
 
 
 /* open_random_file - chooses random file, sets the path and opens it */
-int open_random_file(){
+int open_file(char* i){
 
     /* variable initialization */
     char path[15];
-    int i,file_descriptor;
+    int file_descriptor;
 
-    /* initializes seed, needed for rand() to work properly */
-    srand ( time(NULL) );
-    i = rand() %5 ;
-    sprintf(path, "./SO2014-%d.txt", i);
+    sprintf(path, "./SO2014-%s.txt", i);
 
     /* opens random file and returns it */
     file_descriptor = open(path, O_RDONLY);
 
-
-    // printf("%s %i \n", path, file_descriptor);
 
     LOCK = flock(file_descriptor, LOCK_SH);
 
