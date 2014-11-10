@@ -1,23 +1,27 @@
 #include "common.h"
 
-
+char* path;
 int LOCK;
 
 /*
  * main program
  */
+ 
 int main(int argc, char *argv[]){
    
-    char* i;
+    int i;
     
-    i=argv[1];
+    i=atoi(argv[1]);
     
-    printf("%s", argv[1]);
+    #if 0
+    PRINTFs APENAS PARA DEBUG -------------------------
+    #endif
+    
+    printf("%s\n", argv[1]);
     int res=reader(i);
 
-    printf("%d\n",res);
 
-    return 0;
+    return res;
 }
 
 
@@ -92,13 +96,14 @@ int reader(char* h){
 
 
 /* open_random_file - chooses random file, sets the path and opens it */
-int open_file(char* i){
+int open_file(int i){
 
     /* variable initialization */
-    char path[15];
-    int file_descriptor;
 
-    sprintf(path, "./SO2014-%s.txt", i);
+    int file_descriptor, value;
+
+    path = malloc (15);
+    sprintf (path, "SO2014-%1d.txt", i);
 
     /* opens random file and returns it */
     file_descriptor = open(path, O_RDONLY);

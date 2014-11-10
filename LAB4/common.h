@@ -41,4 +41,6 @@ char* random_string(char** strings, char* buffer);
 /* open_write - opens a file and writes a string 1024 times */
 void open_write(char* path, char* buffer);
 
+#define NUM_CHILDREN 3
+
 #endif
