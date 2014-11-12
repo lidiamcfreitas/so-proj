@@ -16,8 +16,6 @@ int main(int argc, char *argv[]){
     #if 0
     PRINTFs APENAS PARA DEBUG -------------------------
     #endif
-    
-    printf("%s\n", argv[1]);
     int res=reader(i);
 
 
@@ -27,7 +25,7 @@ int main(int argc, char *argv[]){
 
 
 /* reader - saves first string and compares to the others. closes file */
-int reader(char* h){
+int reader(int  h){
 
     /* variable initialization */
     char* buffer= (char*) malloc(sizeof(char)*11);

@@ -8,9 +8,6 @@ int LOCK;
  */
 int main(){
     int res=reader();
-
-    printf("%d\n",res);
-
     return 0;
 }
 
