@@ -24,56 +24,42 @@ void start_reader(){
     int status, valorExit, runningChildren;
     int vec_status[3];
     char u[2];
-        
+
     int j;
-    
-    j = rand() %5;
-    sprintf(u, "%d", j);    
+ 
 
     srand( time(NULL));
-    
+
     for (runningChildren = 0; runningChildren < NUM_CHILDREN; runningChildren++) {
         j = rand() %5;
         sprintf(u, "%d", j); 
         pid = fork();
-        
+
         if (pid < 0) {
-          perror("Could not fork a child.");
-          exit(-1);
-        } else if (pid == 0) {
-            
-
-        
-          if (execl("reader1","reader1",u,NULL) == -1) {
-                perror("Could not execute child program.");
+            perror("Could not fork a child.");
             exit(-1);
-            }
-          }
-    }
-    
-    while (runningChildren > 0) {
-            for(i=0; i<3;i++){
-                
-            if(waitpid(vec_status[i], &status, 0)){
-            
-            if (wait (&status) == -1) { printf("Wait Failed"); }
-            
-            if (WIFEXITED(status)) {
-                valorExit = (char) WEXITSTATUS(status);
-                printf("Filho terminou e devolveu %d\n", valorExit);
-            }
-            else{
-            printf("Child with pid=%ld completed without exit/return\n", (long)pid); 
-            }
-            runningChildren --;
-        }
-          }
-  }
-        
-        
-        
-        
-        //wait(& vec_status[i]);	
+        } else if (pid == 0) {
 
-    
+
+
+            if (execl("reader1","reader1",u,NULL) == -1) {
+                perror("Could not execute child program.");
+                exit(-1);
+            }
+        }
+    }
+
+    while (runningChildren > 0) {
+
+        if (wait (&status) == -1) { printf("Wait Failed"); }
+
+        if (WIFEXITED(status)) {
+            valorExit = (char) WEXITSTATUS(status);
+            printf("Filho terminou e devolveu %d\n", valorExit);
+        }
+        else{
+            printf("Child with pid=%ld completed without exit/return\n", (long)pid); 
+        }
+        runningChildren --;
+    }
 }

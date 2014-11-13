@@ -1,32 +1,37 @@
 #include "common.h"
+#include <pthread.h>
 
-
+char* path;
 int LOCK;
-
+int finish;
 /*
  * main program
+ podes criar threads como jolinable ou detachabel 
+ se for em detachec qnd elas fizerem exit vao limpar tdos os seus recursos enquando sque se forme joinable tem que haver uma thread como o memso process id que faca join para libertar recussos que  e o problema que estou a ter 
  */
-int main(){
-    int res=reader();
 
-    printf("%d\n",res);
-
-    return 0;
-}
-
+#define NUMTHREADS 3
 
 
 /* reader - saves first string and compares to the others. closes file */
-int reader(){
 
+void* reader(char **args){
+    printf("1\n");
+    char *filename = (char*) args;
     /* variable initialization */
     char* buffer= (char*) malloc(sizeof(char)*11);
     char first_string[11];
     int i, file_descriptor;
-    int size_buffer = sizeof(char)*11;
+    int size_buffer = 11 * sizeof(char);
 
-    /* opens random file */
-    file_descriptor = open_random_file();
+
+
+    /* open file */
+
+
+    printf("filename : %s \n ", filename);
+    file_descriptor = open_file(filename);
+    printf("tudo ok 1.1\n");
 
     if(LOCK == -1){ 
         printf("%s \n", strerror(errno));
@@ -47,17 +52,26 @@ int reader(){
                 free(buffer);
                 LOCK=flock(file_descriptor, LOCK_UN);				
                 close(file_descriptor);
-
+                printf("insucesso 1\n");
+                finish++;
+#if 0
                 return -1;
+
+#endif
+                pthread_exit(  (int*) -1) ;
+
+
             }
             else {
+
                 /* string read is different from first string) */
                 if(strcmp(first_string, buffer) != 0){
                     LOCK=flock(file_descriptor, LOCK_UN);
                     close(file_descriptor);
                     free(buffer);
-
-                    return -1;
+                    printf("insucesso 2\n");
+                    finish++;
+                    pthread_exit( (int*) -1);
                 }
             }
 
@@ -71,40 +85,32 @@ int reader(){
         if (strcmp(buffer, "error") != 0){
             printf("%s", buffer);
             free(buffer);
-            return -1;
-
+            printf("insucesso 3\n");
+            finish++;
+            pthread_exit( (int*) -1);
         }
         /* exactly 1024 lines */
         else {
             free(buffer);
-            return 0;
+            printf("sucesso1\n");
+            finish++;
+            pthread_exit( (int*) 0);
         }
     }
-    return 0;
+    pthread_exit( (int*) 0);
 }
 
 
-
-/* open_random_file - chooses random file, sets the path and opens it */
-int open_random_file(){
+/* open_file - Open file specified by LEITOR-PAI-2 */
+int open_file(char path[13]){
 
     /* variable initialization */
-    char path[15];
-    int i,file_descriptor;
 
-    /* initializes seed, needed for rand() to work properly */
-    srand ( time(NULL) );
-    i = rand() %5 ;
-    sprintf(path, "./SO2014-%d.txt", i);
-
-    /* opens random file and returns it */
+    int file_descriptor, value;
+    /* opens file and returns it */
     file_descriptor = open(path, O_RDONLY);
 
-
-    // printf("%s %i \n", path, file_descriptor);
-
     LOCK = flock(file_descriptor, LOCK_SH);
-
 
     return file_descriptor;
 }
@@ -125,6 +131,81 @@ char* read_string(int f_descriptor,char* buffer,int size){
     }
 
     return buffer;
-
 }
+
+
+
+
+int main(int argc, char *argv[]){
+    finish=0;
+    char filename[15];    
+    pthread_t* thread_id;
+    int i,n,tmp;
+    int* exitValue; 
+    int randomnumbers[NUMTHREADS];
+    int numbers[5];
+    pthread_attr_t *attr;
+    int finished;
+    struct timeval st , et;
+    pthread_attr_init(&attr);
+    pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
+
+    thread_id = (pthread_t*) malloc(NUMTHREADS*sizeof(pthread_t));
+    srand((st.tv_sec * 1000)+ (st.tv_usec / 1000));
+    
+    for(i=0; i < NUMTHREADS;i++){
+        numbers[i] = i;
+    }
+
+    for(i=0; i< NUMTHREADS; i++){
+        n = rand() % NUMTHREADS;
+        tmp = numbers[n];
+        numbers[n] = numbers[i];
+        numbers[i] = tmp;
+    }
+
+    for(i=0; i< NUMTHREADS; i++){
+        printf("%d", numbers[i]);
+    }
+
+    gettimeofday(&st , NULL);
+
+    printf("tudo ok 0\n");
+    for(i=0;i<NUMTHREADS;i++){
+        
+        sprintf(filename, "SO2014-%1d.txt",numbers[i]);        
+        printf(" %s %d", filename, numbers[i]);
+        if(pthread_create(&thread_id[i], (&attr), reader,(void*) filename) == 0){
+            printf("Criada a tarefa %d\n", &thread_id[i]);
+        }
+    }
+    printf("tudo ok 1\n");
+
+    while(finish !=  NUMTHREADS ){
+        sleep(0.0001);
+    }
+
+   // while(finished < NUMTHREADS){
+     //   for(i=0;i<NUMTHREADS;i++){
+            // if(pthread_join(thread_id[i],(void *) &exitValue) == NULL){
+            //    printf("Fail to join the thread %d\n", i);
+            // }else{
+            //    finished++ ;
+
+            //	}
+
+           // pthread_join(thread_id[i],NULL);
+
+       // }
+   // }
+
+
+    printf("tudo ok 2\n");
+    gettimeofday(&et , NULL);
+
+    printf("Tempo total de execução do programa: %lu seconds\n",(et.tv_sec - st.tv_sec));
+    pthread_attr_destroy(&attr);
+    return 0;
+}
+
 

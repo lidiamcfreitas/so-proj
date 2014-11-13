@@ -12,12 +12,13 @@
 #include <string.h>
 #include <time.h>
 #include <errno.h>
+#include <pthread.h>
 
 
 /* PROTOTYPES */
 
 /* reader - saves first string and compares to the others. closes file */
-int reader();
+void* reader(char** args);
 
 /* open_random_file - chooses random file, sets the path and opens it */
 int open_random_file();
