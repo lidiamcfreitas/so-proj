@@ -64,18 +64,13 @@ int main(int argc, char* args[]){
     
     sprintf(filename, args[1]);
 
-  /*struct arg_struct *arguments = malloc (sizeof(struct arg_struct));
-    arguments->filename = malloc(15);
-    arguments->filename = args[1]; */
-
 	for(i=0;i<K;i++){
 		linetogo[i] = i*(PORTION) * (sizeof(char)* 11);
-		error = pthread_create(&threads[i], NULL, thread_code, (void *) /*arguments*/ &linetogo[i]);
-		
+		error = pthread_create(&threads[i], NULL, thread_code, (void*)&linetogo[i]);
 	}
 
 	for(i=0;i<K;i++){
-		pthread_join(threads[i], (void *) &returnValues[i]);
+		pthread_join(threads[i], (void*)&returnValues[i]);
         printf("%d\n", returnValues[i]);
 		if (returnValues[i] == 1){
 			printf("It's ok!!!\n");
@@ -98,41 +93,36 @@ int main(int argc, char* args[]){
 
 void * thread_code (void * x) {
     
-   
-    /* struct arg_struct *arguments = malloc (sizeof(struct arg_struct));
-    arguments = (struct arg_struct*) x; */
-    
-  char* file_to_open = malloc(15);
- // sprintf(file_to_open, (char *) args);
+    char* file_to_open = malloc(15);
     file_to_open = /*(char*)arguments->filename; */ filename;
 	printf("%s\n", file_to_open);
-  int   fd;
-  struct timeval tvstart; /* start time */
+    int   fd;
+    struct timeval tvstart; /* start time */
 
 
-  /* Initialize the seed of random number generator but use gettimeofday */
-  if (gettimeofday(&tvstart, NULL) == -1) {
-    perror("Could not get time of day, exiting.");
-    pthread_exit((void*)-1);
-  }
-  srandom ((unsigned)tvstart.tv_usec);
-  //  srandom ((unsigned) time(NULL));
+    /* Initialize the seed of random number generator but use gettimeofday */
+    if (gettimeofday(&tvstart, NULL) == -1) {
+        perror("Could not get time of day, exiting.");
+        pthread_exit((void*)-1);
+    }
+    srandom ((unsigned)tvstart.tv_usec);
+    //  srandom ((unsigned) time(NULL));
 
 
-  fd  = open (file_to_open, O_RDONLY);
+    fd  = open (file_to_open, O_RDONLY);
     printf("-------> %d\n", (*(int*) x));
-  lseek(fd, (int) x, SEEK_SET);
+    lseek(fd, (int) x, SEEK_SET);
 
-  printf("Monitor will check if file %s is consistent...\n", file_to_open);
+    printf("Monitor will check if file %s is consistent...\n", file_to_open);
 
-  if (fd == -1) {
-    perror ("Error opening file");
-    pthread_exit ((void*)-1);
-  }
-  else {
-    char string_to_read[STRING_SZ];
-    char first_string[STRING_SZ];
-    int  i, nbytes;
+    if (fd == -1) {
+        perror ("Error opening file");
+        pthread_exit ((void*)-1);
+    }
+    else {
+        char string_to_read[STRING_SZ];
+        char first_string[STRING_SZ];
+        int  i, nbytes;
 
 /* Shared lock - Blocking
     if (flock(fd, LOCK_SH) < 0) {
