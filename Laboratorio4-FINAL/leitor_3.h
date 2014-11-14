@@ -17,8 +17,8 @@
 #include <pthread.h>
 
 
-#define L 1024
-#define K 5
+#define L 8
+#define K 4
 #define PORTION L/K
 
 #define NB_FILES       5
