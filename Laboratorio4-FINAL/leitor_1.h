@@ -1,5 +1,5 @@
-#ifndef __COMMON_H__
-#define __COMMON_H__
+#ifndef __LEITOR_1_H__
+#define __LEITOR_1_H__
 
 #include <unistd.h>
 #include <sys/types.h>

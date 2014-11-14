@@ -1,29 +1,4 @@
-/*-------------------------------------------------------------------------------------
-| SO, Solução do Exercício 3, programa LEITOR
-|
-|
-+-------------------------------------------------------------------------------------*/
-
-/*-------------------------------------------------------------------------------------
-| includes
-+-------------------------------------------------------------------------------------*/
-
-#include <stdio.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <time.h>
-#include <sys/time.h>
-#include <string.h>
-#include <sys/file.h> /* flock() */
-#include <errno.h>
-#include <pthread.h>
-
-//#include "exercicio1.h"
-#define NB_THREADS 3
-#define NB_FILES 5
-#define NB_ENTRIES 1024
-#define STRING_SZ 10
+#include "leitor_2.h"
 
 /*-------------------------------------------------------------------------------------
 | fixed strings
