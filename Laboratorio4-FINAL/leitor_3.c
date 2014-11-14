@@ -19,6 +19,7 @@
 #include <errno.h>
 #include <pthread.h>
 
+
 #define L 1024
 #define K 5
 #define PORTION L/K
@@ -28,6 +29,11 @@
 #define STRING_SZ      10
 
 #define get_random(max) rand()%max
+
+/*struct arg_struct {
+    char* filename;
+    int j;
+};*/
 
 char filename[15];
 
@@ -42,6 +48,12 @@ void * thread_code (void * arguments);
 +-------------------------------------------------------------------------------------*/
 
 int main(int argc, char* args[]){
+    
+    if (argc <= 1) {
+        printf("por favor insira o nome do ficheiro\n");
+        return -1;
+    }
+    
 	struct timeval st , et;
 	int i, error;
 	pthread_t threads[K];
@@ -50,7 +62,7 @@ int main(int argc, char* args[]){
     
 	gettimeofday(&st , NULL);
     
-    strncpy(filename, args[1], 15);
+    sprintf(filename, args[1]);
 
   /*struct arg_struct *arguments = malloc (sizeof(struct arg_struct));
     arguments->filename = malloc(15);
