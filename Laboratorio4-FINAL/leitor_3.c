@@ -30,11 +30,6 @@
 
 #define get_random(max) rand()%max
 
-/*struct arg_struct {
-    char* filename;
-    int j;
-};*/
-
 char filename[15];
 
 /*-------------------------------------------------------------------------------------
@@ -69,15 +64,25 @@ int main(int argc, char* args[]){
 		error = pthread_create(&threads[i], NULL, thread_code, (void*)&linetogo[i]);
 	}
 
+    int sum = 0;
 	for(i=0;i<K;i++){
+        
 		pthread_join(threads[i], (void*)&returnValues[i]);
+        sum += returnValues[i];
+        
         printf("%d\n", returnValues[i]);
 		if (returnValues[i] == 1){
 			printf("It's ok!!!\n");
 		} else {
 			printf("It's wrong\n");
 		}
-	}	
+	}
+	
+    if (sum==K) { // sum equals number of threads
+        printf("FICHEIRO CORRECTO\n");
+    } else {
+        printf("FICHEIRO ERRADO\n");
+    }
 
 	gettimeofday(&et , NULL);
    	printf("Running time of program: %d microseconds\n",(et.tv_usec - st.tv_usec));
@@ -111,7 +116,7 @@ void * thread_code (void * x) {
 
     fd  = open (file_to_open, O_RDONLY);
     printf("-------> %d\n", (*(int*) x));
-    lseek(fd, (int) x, SEEK_SET);
+    lseek(fd, (*(int*) x), SEEK_SET);
 
     printf("Monitor will check if file %s is consistent...\n", file_to_open);
 
@@ -169,10 +174,11 @@ void * thread_code (void * x) {
       }
     }
     
-    if (read (fd, string_to_read, STRING_SZ) > 0){
-		fprintf (stderr, "\nInconsistent file (too many lines): %s\n", file_to_open);
-		pthread_exit ((void*)-1);
-    }
+    // COMENTADO PORQUE EXISTEM LINHAS PARA LER A SEGUIR QUE NAO E SUPOSTO LER
+    //if (read (fd, string_to_read, STRING_SZ) > 0){
+	//	fprintf (stderr, "\nInconsistent file (too many lines): %s\n", file_to_open);
+	//	pthread_exit ((void*)-1);
+    //}
     
     /*Falta teste para ver se existem mais do que 1024 linhas*/
  
