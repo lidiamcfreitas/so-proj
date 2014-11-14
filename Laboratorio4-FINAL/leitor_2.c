@@ -22,7 +22,7 @@
 //#include "exercicio1.h"
 #define NB_THREADS 3
 #define NB_FILES 5
-#define NB_ENTRIES 2014
+#define NB_ENTRIES 1024
 #define STRING_SZ 10
 
 /*-------------------------------------------------------------------------------------
