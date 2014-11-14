@@ -1,4 +1,4 @@
-#include "leitor1.h"
+#include "leitor_1.h"
 
 char* path;
 int LOCK;

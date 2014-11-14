@@ -27,7 +27,8 @@ int main(int argc, char* args[]){
     
 	gettimeofday(&st , NULL);
     
-    sprintf(filename, args[1]);
+    strncpy(filename, args[1],15);
+
 
 	for(i=0;i<K;i++){
 		linetogo[i] = i*(PORTION) * (sizeof(char)* 11);
